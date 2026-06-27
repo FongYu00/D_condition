@@ -162,6 +162,8 @@ console.log("SoSci CASE ID:", sosciCaseId);
 /* =========================
    2. Google Script URL
    ========================= */
+
+
 const GOOGLE_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbz4VL8LzWnIP547nW6cxNMQd-Wxw-r-LEZeIvayIg4c01Ib2bqeNsaXEB32jMefoMtp/exec";
 
@@ -171,25 +173,22 @@ const participantId = getOrCreateParticipantId();
 console.log("참가자 ID:", participantId);
 userInput.addEventListener("keypress", e => {
     if (e.key === "Enter") handleSubmit();
-});  
+});
+  
 /* =========================
    3. 저장 전용 함수
    ========================= */
-function saveChatLog(userText, botText) {
-  const data =
-    "caseId=" + encodeURIComponent(sosciCaseId) +
-    "&participantId=" + encodeURIComponent(participantId) +
-    "&userMessage=" + encodeURIComponent(userText) +
-    "&botResponse=" + encodeURIComponent(botText) +
-    "&timestamp=" + encodeURIComponent(new Date().toISOString());
+function saveChatLog(userMessage, botResponse) {
+  const body = new URLSearchParams({
+    caseId: caseId,
+    participantId: participantId,
+    userMessage: userMessage,
+    botResponse: botResponse
+  });
 
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
-    body: data
+    body: body
   });
 }
 

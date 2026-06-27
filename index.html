@@ -154,16 +154,16 @@
    SoSci CASE ID 가져오기
    ========================= */
 const urlParams = new URLSearchParams(window.location.search);
-const socsiCaseId = urlParams.get("case");
+const sosciCaseId = urlParams.get("case");
 
-console.log("SoSci CASE ID:", socsiCaseId);
+console.log("SoSci CASE ID:", sosciCaseId);
 
 
 /* =========================
    2. Google Script URL
    ========================= */
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbzGZUgTz8y0u9s2IqzZZk9ZzFjQfrk8epoxD9DwZ0gVWrX_ZoF0hcWHy_-DXR67jyTv/exec";
+  "https://script.google.com/macros/s/AKfycbz4VL8LzWnIP547nW6cxNMQd-Wxw-r-LEZeIvayIg4c01Ib2bqeNsaXEB32jMefoMtp/exec";
 
 const chatDisplay = document.getElementById("chatDisplay");
 const userInput = document.getElementById("userInput");
@@ -176,21 +176,21 @@ userInput.addEventListener("keypress", e => {
    3. 저장 전용 함수
    ========================= */
 function saveChatLog(userText, botText) {
+  const data =
+    "caseId=" + encodeURIComponent(sosciCaseId) +
+    "&participantId=" + encodeURIComponent(participantId) +
+    "&userMessage=" + encodeURIComponent(userText) +
+    "&botResponse=" + encodeURIComponent(botText) +
+    "&timestamp=" + encodeURIComponent(new Date().toISOString());
+
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
     headers: {
-      "Content-Type": "text/plain"
+      "Content-Type": "application/x-www-form-urlencoded"
     },
-    body: JSON.stringify({
-      caseId: socsiCaseId,
-      participantId: participantId,
-      userMessage: userText,
-      botResponse: botText,
-      timestamp: new Date().toISOString()
-    })
-  })
-  .catch(err => console.error("저장 실패:", err));
+    body: data
+  });
 }
 
 /* 키워드 기반 응답 데이터 */
@@ -786,7 +786,7 @@ addMessage("안녕하세요! 무엇을 도와드릴까요?", "bot");
 </script>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzGZUgTz8y0u9s2IqzZZk9ZzFjQfrk8epoxD9DwZ0gVWrX_ZoF0hcWHy_-DXR67jyTv/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzOR_JbTQRJV6jSWE2wPXrIh0gPkgi5vRlHWKQmaUvii5O4VSpaK_-Oz6Hzs-79hUq1/exec";
 
 // URL 파라미터 읽기 (?case=123)
 const params = new URLSearchParams(window.location.search);

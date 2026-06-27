@@ -179,17 +179,14 @@ userInput.addEventListener("keypress", e => {
    3. 저장 전용 함수
    ========================= */
 function saveChatLog(userMessage, botResponse) {
-  const body = new URLSearchParams({
-    caseId: caseId,
-    participantId: participantId,
-    userMessage: userMessage,
-    botResponse: botResponse
-  });
+  const form = document.getElementById("logForm");
 
-  fetch(GOOGLE_SCRIPT_URL, {
-    method: "POST",
-    body: body
-  });
+  form.caseId.value = sosciCaseId;
+  form.participantId.value = participantId;
+  form.userMessage.value = userMessage;
+  form.botResponse.value = botResponse;
+
+  form.submit();
 }
 
 /* 키워드 기반 응답 데이터 */
@@ -821,5 +818,22 @@ fetch(GAS_URL, {
   );
 });
 </script>
+<!-- ===============================
+     Google Apps Script 전송용 Form
+================================ -->
+<form id="logForm"
+      action="https://script.google.com/macros/s/AKfycbz4VL8LzWnIP547nW6cxNMQd-Wxw-r-LEZeIvayIg4c01Ib2bqeNsaXEB32jMefoMtp/exec"
+      method="POST"
+      target="hiddenFrame">
+
+  <input type="hidden" name="caseId">
+  <input type="hidden" name="participantId">
+  <input type="hidden" name="userMessage">
+  <input type="hidden" name="botResponse">
+
+</form>
+
+<iframe name="hiddenFrame" style="display:none"></iframe>
+
 </body>
 </html>

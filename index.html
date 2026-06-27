@@ -163,7 +163,7 @@ console.log("SoSci CASE ID:", socsiCaseId);
    2. Google Script URL
    ========================= */
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbxLOKI0k025ccHPLE7Fk29rh4_fJGLXMLgei4eZIfyJD1FwToDVIs2gAQ4NwrM9LZTQ/exec";
+  "https://script.google.com/macros/s/AKfycbzGZUgTz8y0u9s2IqzZZk9ZzFjQfrk8epoxD9DwZ0gVWrX_ZoF0hcWHy_-DXR67jyTv/exec";
 
 const chatDisplay = document.getElementById("chatDisplay");
 const userInput = document.getElementById("userInput");
@@ -783,6 +783,44 @@ function getOrCreateParticipantId() {
 
 /* 초기 메시지 */
 addMessage("안녕하세요! 무엇을 도와드릴까요?", "bot");
+</script>
+
+<script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzGZUgTz8y0u9s2IqzZZk9ZzFjQfrk8epoxD9DwZ0gVWrX_ZoF0hcWHy_-DXR67jyTv/exec";
+
+// URL 파라미터 읽기 (?case=123)
+const params = new URLSearchParams(window.location.search);
+const caseId = params.get("case") || "NOCASE";
+
+const payload = {
+  caseId: caseId,
+  participantId: crypto.randomUUID(),
+  userMessage: "test message",
+  botResponse: "test response"
+};
+
+fetch(GAS_URL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(payload)
+})
+.then(res => res.text())
+.then(txt => {
+  console.log("SERVER:", txt);
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `<p>서버 응답: ${txt}</p>`
+  );
+})
+.catch(err => {
+  console.error(err);
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `<p style="color:red">POST 실패</p>`
+  );
+});
 </script>
 </body>
 </html>
